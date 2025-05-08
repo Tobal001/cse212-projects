@@ -1,5 +1,10 @@
 ﻿using System.Diagnostics;
 
+
+//Based on the timing data, Algorithm3 is much faster and Algorithm2 is much slower. 
+//Note that Algorithm3 is barely increasing (if at all) and Algorithm2 is growing by 
+//larger amounts as the size of the data increases. This result agrees with the big O notation from above. 
+//O(log n) is better than O(n), and O(n) is better than O(n2) when n is "large".
 public static class Algorithms {
     public static void Run() {
         Console.WriteLine("{0,15}{1,15}{2,15}{3,15}{4,15}{5,15}{6,15}", "n", "alg1-count", "alg2-count", "alg3-count",
@@ -35,6 +40,7 @@ public static class Algorithms {
     /// done the count is returned.
     /// </summary>
     /// <param name="size">the amount of work to do</param>
+    /// O(n)
     private static int Algorithm1(int size) {
         var count = 0;
         for (var i = 0; i < size; ++i)
@@ -49,6 +55,7 @@ public static class Algorithms {
     /// done the count is returned.
     /// </summary>
     /// <param name="size">the amount of work to do</param>
+    /// O(n)
     private static int Algorithm2(int size) {
         var count = 0;
         for (var i = 0; i < size; ++i)
