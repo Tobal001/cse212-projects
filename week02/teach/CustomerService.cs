@@ -5,15 +5,18 @@
 public class CustomerService {
     public static void Run() {
         // Example code to see what's in the customer service queue:
-        // var cs = new CustomerService(10);
+        // var cs = new CustomerService(0);
         // Console.WriteLine(cs);
 
         // Test Cases
 
         // Test 1
-        // Scenario: 
-        // Expected Result: 
+        // Scenario: If customerService is < 0 
+        // Expected Result: should return customer list 10
         Console.WriteLine("Test 1");
+        
+
+
 
         // Defect(s) Found: 
 
