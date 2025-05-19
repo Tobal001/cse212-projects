@@ -10,10 +10,12 @@ public class PersonQueue
     /// <summary>
     /// Add a person to the queue
     /// </summary>
-    /// <param name="person">The person to add</param>
+    /// <param name="person">The person to add</param> 
     public void Enqueue(Person person)
     {
-        _queue.Insert(0, person);
+        ///Insert creates a LIFO(stack) behaviour, not a FIFO(queue) 
+        // _queue.Insert(0, person); <-- fixed issue
+        _queue.Add(person); // in a queue context .Add() works like Enqueue()
     }
 
     public Person Dequeue()
