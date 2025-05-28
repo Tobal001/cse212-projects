@@ -22,7 +22,27 @@ public static class SetsAndMaps
     public static string[] FindPairs(string[] words)
     {
         // TODO Problem 1 - ADD YOUR CODE HERE
-        return [];
+        HashSet<string> wordSet = new HashSet<string>(words);
+        HashSet<string> used = new HashSet<string>();
+        List<string> flippedPairs = new List<string>();
+
+        foreach (string word in wordSet)
+        {
+            char[] chars = word.ToCharArray();
+            Array.Reverse(chars);
+            string flipped = new string(chars);
+
+            if (wordSet.Contains(flipped)
+                && !used.Contains(word)
+                && !used.Contains(flipped)
+                && word != flipped)
+            {
+                flippedPairs.Add($"{word} & {flipped}");
+                used.Add(word);
+                used.Add(flipped);
+            }
+        }
+        return flippedPairs.ToArray();
     }
 
     /// <summary>
@@ -39,10 +59,23 @@ public static class SetsAndMaps
     public static Dictionary<string, int> SummarizeDegrees(string filename)
     {
         var degrees = new Dictionary<string, int>();
+
         foreach (var line in File.ReadLines(filename))
         {
             var fields = line.Split(",");
             // TODO Problem 2 - ADD YOUR CODE HERE
+            if (fields.Length < 5) continue;
+
+            string earnedDegree = fields[3].Trim();
+
+            if (degrees.ContainsKey(earnedDegree))
+            {
+                degrees[earnedDegree] += 1;
+            }
+            else
+            {
+                degrees.Add(earnedDegree, 1);
+            }
         }
 
         return degrees;
@@ -66,8 +99,34 @@ public static class SetsAndMaps
     /// </summary>
     public static bool IsAnagram(string word1, string word2)
     {
+        word1 = word1.Replace(" ", "").ToLower();
+        word2 = word2.Replace(" ", "").ToLower();
+
+        if (word1.Length != word2.Length) return false;
+
         // TODO Problem 3 - ADD YOUR CODE HERE
-        return false;
+        var letterCount = new Dictionary<char, int>();
+
+        foreach (char c in word1)
+        {
+            if (!letterCount.ContainsKey(c))
+                letterCount[c] = 1;
+            else
+                letterCount[c]++;
+        }
+
+        foreach (char c in word2)
+        {
+            if (!letterCount.ContainsKey(c))
+                return false;
+
+            letterCount[c]--;
+
+            if (letterCount[c] < 0)
+                return false;
+        }
+
+        return true;
     }
 
     /// <summary>

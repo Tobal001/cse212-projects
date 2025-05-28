@@ -1,3 +1,6 @@
+using System.Reflection.Metadata.Ecma335;
+
+
 /// <summary>
 /// Defines a maze using a dictionary. The dictionary is provided by the
 /// user when the Maze object is created. The dictionary will contain the
@@ -13,54 +16,56 @@
 ///
 /// If there is a wall, then throw an InvalidOperationException with the message "Can't go that way!".  If there is no wall,
 /// then the 'currX' and 'currY' values should be changed.
-/// </summary>
+/// </summary> 
 public class Maze
 {
     private readonly Dictionary<ValueTuple<int, int>, bool[]> _mazeMap;
     private int _currX = 1;
     private int _currY = 1;
 
-    public Maze(Dictionary<ValueTuple<int, int>, bool[]> mazeMap)
+          public Maze(Dictionary<ValueTuple<int, int>, bool[]> mazeMap)
     {
         _mazeMap = mazeMap;
     }
+
+    private void TryMove(int dX, int dY, int directionIndex)
+    {
+        if (!_mazeMap.TryGetValue((_currX, _currY), out var directions) || !directions[directionIndex])
+            throw new InvalidOperationException("Can't go that way!");
+
+        int newX = _currX + dX;
+        int newY = _currY + dY;
+
+        _currX = newX;
+        _currY = newY;
+    }
+    
+
 
     // TODO Problem 4 - ADD YOUR CODE HERE
     /// <summary>
     /// Check to see if you can move left.  If you can, then move.  If you
     /// can't move, throw an InvalidOperationException with the message "Can't go that way!".
     /// </summary>
-    public void MoveLeft()
-    {
-        // FILL IN CODE
-    }
+    public void MoveLeft() => TryMove(-1, 0, 0);
 
     /// <summary>
     /// Check to see if you can move right.  If you can, then move.  If you
     /// can't move, throw an InvalidOperationException with the message "Can't go that way!".
     /// </summary>
-    public void MoveRight()
-    {
-        // FILL IN CODE
-    }
+    public void MoveRight() => TryMove(1, 0, 1);
 
     /// <summary>
     /// Check to see if you can move up.  If you can, then move.  If you
     /// can't move, throw an InvalidOperationException with the message "Can't go that way!".
     /// </summary>
-    public void MoveUp()
-    {
-        // FILL IN CODE
-    }
+    public void MoveUp() => TryMove( 0, -1, 2);
 
     /// <summary>
     /// Check to see if you can move down.  If you can, then move.  If you
     /// can't move, throw an InvalidOperationException with the message "Can't go that way!".
     /// </summary>
-    public void MoveDown()
-    {
-        // FILL IN CODE
-    }
+    public void MoveDown() => TryMove(0, 1, 3);
 
     public string GetStatus()
     {
