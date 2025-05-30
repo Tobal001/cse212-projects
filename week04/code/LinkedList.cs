@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Reflection.PortableExecutable;
 
 public class LinkedList : IEnumerable<int>
 {
@@ -33,6 +34,19 @@ public class LinkedList : IEnumerable<int>
     public void InsertTail(int value)
     {
         // TODO Problem 1
+        Node newNode = new(value);
+
+        if (_tail == null)
+        {
+            _head = newNode;
+            _tail = newNode;
+            return;
+        }
+        else
+        {
+            _tail.Next = newNode;
+            _tail = newNode;
+        }
     }
 
 
@@ -64,7 +78,16 @@ public class LinkedList : IEnumerable<int>
     /// </summary>
     public void RemoveTail()
     {
-        // TODO Problem 2
+        if (_head == _tail)
+        {
+            _head = null;
+            _tail = null;
+        }
+        else if (_tail is not null)
+        {
+            _tail.Prev!.Next = null;
+            _tail = _tail.Prev;
+        }
     }
 
     /// <summary>
@@ -78,26 +101,26 @@ public class LinkedList : IEnumerable<int>
         while (curr is not null)
         {
             if (curr.Data == value)
-            {
-                // If the location of 'value' is at the end of the list,
-                // then we can call insert_tail to add 'new_value'
-                if (curr == _tail)
                 {
-                    InsertTail(newValue);
-                }
-                // For any other location of 'value', need to create a 
-                // new node and reconnect the links to insert.
-                else
-                {
-                    Node newNode = new(newValue);
-                    newNode.Prev = curr; // Connect new node to the node containing 'value'
-                    newNode.Next = curr.Next; // Connect new node to the node after 'value'
-                    curr.Next!.Prev = newNode; // Connect node after 'value' to the new node
-                    curr.Next = newNode; // Connect the node containing 'value' to the new node
-                }
+                    // If the location of 'value' is at the end of the list,
+                    // then we can call insert_tail to add 'new_value'
+                    if (curr == _tail)
+                    {
+                        InsertTail(newValue);
+                    }
+                    // For any other location of 'value', need to create a 
+                    // new node and reconnect the links to insert.
+                    else
+                    {
+                        Node newNode = new(newValue);
+                        newNode.Prev = curr; // Connect new node to the node containing 'value'
+                        newNode.Next = curr.Next; // Connect new node to the node after 'value'
+                        curr.Next!.Prev = newNode; // Connect node after 'value' to the new node
+                        curr.Next = newNode; // Connect the node containing 'value' to the new node
+                    }
 
-                return; // We can exit the function after we insert
-            }
+                    return; // We can exit the function after we insert
+                }
 
             curr = curr.Next; // Go to the next node to search for 'value'
         }
@@ -108,8 +131,33 @@ public class LinkedList : IEnumerable<int>
     /// </summary>
     public void Remove(int value)
     {
-        // TODO Problem 3
+        Node? curr = _head;
+        while (curr != null)
+        {
+            if (curr.Data == value)
+            {
+                if (curr == _head)
+                {
+                    RemoveHead();
+                    return;
+                }
+                else if (curr == _tail)
+                {
+                    RemoveTail();
+                    return;
+                }
+                else
+                {
+                    curr.Next.Prev = curr.Prev;
+                    curr.Prev.Next = curr.Next;
+                }
+                return;
+            }
+            curr = curr.Next;
+        }
     }
+
+    
 
     /// <summary>
     /// Search for all instances of 'oldValue' and replace the value to 'newValue'.
@@ -117,6 +165,28 @@ public class LinkedList : IEnumerable<int>
     public void Replace(int oldValue, int newValue)
     {
         // TODO Problem 4
+        Node? curr = _head;
+        while (curr != null)
+        {
+            if (curr.Data == oldValue)
+            {
+                Node newNode = new(newValue);
+                newNode.Prev = curr.Prev;
+                newNode.Next = curr.Next;
+
+                if (curr.Prev != null)
+                    curr.Prev.Next = newNode;
+
+                else
+                    _head = newNode;
+
+                if (curr.Next != null)
+                    curr.Next.Prev = newNode;
+                else
+                    _tail = newNode;
+            }
+            curr = curr.Next;
+        }
     }
 
     /// <summary>
@@ -147,7 +217,13 @@ public class LinkedList : IEnumerable<int>
     public IEnumerable Reverse()
     {
         // TODO Problem 5
-        yield return 0; // replace this line with the correct yield return statement(s)
+        var curr = _tail;
+        while (curr is not null)
+        {
+            yield return curr.Data;
+            curr = curr.Prev;
+        }
+        
     }
 
     public override string ToString()
